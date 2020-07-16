@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Category;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ECommerceController extends AbstractController
 {
@@ -22,6 +23,24 @@ class ECommerceController extends AbstractController
      */
     public function category()
     {
-        return $this->render('e_commerce/category.html.twig');
+        $repository = $this->getDoctrine()->getRepository(Category::class);
+        $categorys = $repository->findAll();
+        return $this->render('e_commerce/category.html.twig', [
+            'categorys' => $categorys
+        ]);
+    }
+
+    /**
+     * @Route("/{name}", name="list_product")
+     */
+    public function listProduct($name)
+    {
+        // $repository = $this->getDoctrine()->getRepository(Category::class);
+
+        // $category = $repository->find($name);
+
+        return $this->render('e_commerce/listProductByCategory.html.twig', [
+            'name' => $name
+        ]);
     }
 }

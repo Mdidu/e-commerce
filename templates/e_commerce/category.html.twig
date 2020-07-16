@@ -2,6 +2,11 @@
 
 {% block body %}
 <h1>Liste des catérogies !</h1>
-{# Boucle qui récupérera les différentes catégories 
-    dans la database et les affichera dans un a #}
+{% for category in categorys %}
+    <div class="container">
+        <a href="{{ path('list_product', { name: category.name}) }}">
+            {{ category.name }}
+        </a>
+    </div>
+{% endfor %}
 {% endblock %}
