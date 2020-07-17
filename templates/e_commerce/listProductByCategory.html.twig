@@ -2,4 +2,5 @@
 
 {% block body %}
 <h1>Liste des {{ name }}</h1>
+<a href="{{ path('create_product', {name: name}) }}">Ajouter un produit !</a>
 {% endblock %}
