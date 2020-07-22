@@ -37,24 +37,9 @@ class ECommerceController extends AbstractController
     }
 
     /**
-     * @Route("/{name}", name="list_product")
+     * @Route("/new", name="create_product")
      */
-    public function listProduct($name)
-    {
-        // $repository = $this->getDoctrine()->getRepository(Category::class);
-
-        // $category = $repository->find($name);
-
-        return $this->render('e_commerce/listProductByCategory.html.twig', [
-            'name' => $name
-        ]);
-    }
-
-    /**
-     * @Route("/{name}/new", name="create_product")
-     */
-    public function createProduct($name,
-                                Request $request,
+    public function createProduct(Request $request,
                                 EntityManagerInterface $manager)
     {
         $product = new Product();
@@ -80,8 +65,10 @@ class ECommerceController extends AbstractController
             $manager->persist($product);
             $manager->flush();
 
-            return $this->redirectToRoute('list_product', 
-            ['id' => $product->getCategory()]);
+            $category = $repository->find($product->getCategory());
+
+            return $this->redirectToRoute('list_product', ['name' => $category->getName(), 
+            'category' => $category]);
         }
 
         return $this->render('e_commerce/createProduct.html.twig', [
@@ -89,8 +76,30 @@ class ECommerceController extends AbstractController
             'categorys' => $categorys
         ]);
     }
+    
     /**
-     * afficher les produits dans la liste
+     * @Route("/{name}", name="list_product")
+     */
+    public function listProduct($name, Category $category)
+    {
+        $product = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        
+        return $this->render('e_commerce/listProductByCategory.html.twig', [
+            'category' => $category,
+            'products' => $product
+        ]);
+    }
+    /**
+     * @Route("/{name}/{id}", name="product")
+     */
+    public function product($name, $id, Product $product)
+    {
+        return $this->render('e_commerce/product.html.twig', [
+            'product' => $product
+        ]);
+    }
+
+    /**
      * créer page produit
      * design global du site
      * search bar

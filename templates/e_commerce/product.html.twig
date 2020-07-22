@@ -1,1 +1,26 @@
 {% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row w-100 justify-content-center">
+    <h1>{{ product.title }}</h1>
+</div>
+<div class="row w-100 justify-content-center">
+    <div>{{ product.description}}</div>
+</div>
+
+<div class="row mt-3">
+    <img src="{{ product.image }}" alt="" class="col-4">
+    <div class="col-4"><span class="font-weight-bold">Prix :</span> {{ product.price }}€</div>
+    <div class="col-4">
+        <div class="border p-3">
+            <!-- A modifier lors de la création du panier et du système de paiement -->
+            <h5>Achat</h5>
+            <button class="btn btn-muted">Ajouter au panier !</button>
+            <button class="btn btn-warning mt-2">Acheter le produit !</button>
+        </div>
+        
+    </div>
+</div>
+
+    
+{% endblock %}

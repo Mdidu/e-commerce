@@ -1,6 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Liste des {{ name }}</h1>
-<a href="{{ path('create_product', {name: name}) }}">Ajouter un produit !</a>
+<h1>Liste des {{ category.name }}</h1>
+
+<div class="container">
+    <div class="row">
+{% for product in products %}
+{% if product.category.id is same as(category.id) %}
+    <div class="card col-2">
+        <a href="{{ path('product', {'name': category.name, 'id': product.id}) }}">
+        <img class="card-img-top" src="{{product.image}}" alt="">
+        <div class="card-body">
+            <div class="card-text">{{product.price}}€</div>
+            <div class="card-title">{{product.title}}</div>
+        </div>
+        </a>
+    </div>
+{% endif %}
+        
+{% endfor %}
+    </div>
+</div>
 {% endblock %}
