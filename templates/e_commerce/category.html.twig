@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>Liste des catérogies !</h1>
+<h1 class="row justify-content-center">Liste des catérogies !</h1>
+<div class="row">
 {% for category in categorys %}
-    <div class="container">
-        <a href="{{ path('list_product', { name: category.name}) }}">
+    <!-- <div class="container"> -->
+        <a class="col-3 text-dark" href="{{ path('list_product', { name: category.name}) }}">
             {{ category.name }}
         </a>
-    </div>
-{% endfor %}
+    <!-- </div> -->
+{% endfor %}</div>
 {% endblock %}

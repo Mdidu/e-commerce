@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
 class ECommerceController extends AbstractController
 {
@@ -78,6 +79,34 @@ class ECommerceController extends AbstractController
     }
     
     /**
+     * @Route("/search", name="search")
+     */
+    public function search(EntityManagerInterface $entityManager, Request $request)
+    {
+        // $product = new Product();
+        // $form = $this->createForm(SearchType::class, $product);
+        
+        $search = $request->request->get('search');
+        
+        $repository = $entityManager->getRepository(Product::class);
+        $queryBuilder = $entityManager->createQueryBuilder();
+
+        $queryBuilder->select('p.id, p.title, p.image, p.price, c.name')
+                     ->from(Product::class, 'p')
+                     ->leftJoin(category::class, 'c', 'WITH', 'c.id = p.category')
+                     ->andWhere('p.title LIKE :search')
+                     ->setParameter('search', $search.'%');
+
+        $res = $queryBuilder->getQuery()->getScalarResult();
+        // dump($res);
+
+        return $this->render('search/index.html.twig', [
+            'results' => $res
+            // 'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/{name}", name="list_product")
      */
     public function listProduct($name, Category $category)
@@ -100,12 +129,11 @@ class ECommerceController extends AbstractController
     }
 
     /**
-     * créer page produit
-     * design global du site
      * search bar
-     * home page
      * les logs
      * panier
+     * home page
+     * design global du site
      * commande
      */
 }
