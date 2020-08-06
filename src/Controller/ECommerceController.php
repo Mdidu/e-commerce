@@ -83,8 +83,6 @@ class ECommerceController extends AbstractController
      */
     public function search(EntityManagerInterface $entityManager, Request $request)
     {
-        // $product = new Product();
-        // $form = $this->createForm(SearchType::class, $product);
         
         $search = $request->request->get('search');
         
@@ -98,11 +96,9 @@ class ECommerceController extends AbstractController
                      ->setParameter('search', $search.'%');
 
         $res = $queryBuilder->getQuery()->getScalarResult();
-        // dump($res);
 
         return $this->render('search/index.html.twig', [
             'results' => $res
-            // 'form' => $form->createView()
         ]);
     }
 
@@ -127,13 +123,12 @@ class ECommerceController extends AbstractController
             'product' => $product
         ]);
     }
-
     /**
-     * search bar
      * les logs
      * panier
      * home page
      * design global du site
      * commande
+     * auto completion search bar
      */
 }
