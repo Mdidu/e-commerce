@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Rank;
+use App\Entity\Ranking;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Rank|null find($id, $lockMode = null, $lockVersion = null)
- * @method Rank|null findOneBy(array $criteria, array $orderBy = null)
- * @method Rank[]    findAll()
- * @method Rank[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Ranking|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Ranking|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Ranking[]    findAll()
+ * @method Ranking[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RankRepository extends ServiceEntityRepository
+class RankingRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Rank::class);
+        parent::__construct($registry, Ranking::class);
     }
 
     // /**
-    //  * @return Rank[] Returns an array of Rank objects
+    //  * @return Ranking[] Returns an array of Ranking objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class RankRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Rank
+    public function findOneBySomeField($value): ?Ranking
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.exampleField = :val')

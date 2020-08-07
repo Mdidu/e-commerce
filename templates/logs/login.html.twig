@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="row justify-content-center">Connexion</h1>
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.email, {
+        'attr': 
+            {'placeholder': 'Entrez votre email !'},
+        'label': "Email : (*)"}) 
+    }}
+
+    {{ form_row(form.password, {
+        'attr': 
+            {'placeholder': 'Entrez votre mot de passe !'},
+        'label': "Mot de passe : (*)"}) 
+    }}
+
+    <button type="submit" class="btn btn-success">Inscription</button>
+
+    {{ form_end(form) }}
+{% endblock %}

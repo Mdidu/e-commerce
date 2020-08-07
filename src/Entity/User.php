@@ -32,10 +32,13 @@ class User
      */
     private $password;
 
+    private $checkedPassword;
+
     /**
-     * @ORM\ManyToOne(targetEntity=Rank::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Ranking::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $rank_id;
+    private $rank;
 
     public function getId(): ?int
     {
@@ -78,14 +81,26 @@ class User
         return $this;
     }
 
-    public function getRankId(): ?Rank
+    public function getCheckedPassword(): ?string
     {
-        return $this->rank_id;
+        return $this->checkedPassword;
     }
 
-    public function setRankId(?Rank $rank_id): self
+    public function setCheckedPassword(string $checkedPassword): self
     {
-        $this->rank_id = $rank_id;
+        $this->checkedPassword = $checkedPassword;
+
+        return $this;
+    }
+
+    public function getRank(): ?Ranking
+    {
+        return $this->rank;
+    }
+
+    public function setRank(?Ranking $rank): self
+    {
+        $this->rank = $rank;
 
         return $this;
     }

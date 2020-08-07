@@ -79,30 +79,6 @@ class ECommerceController extends AbstractController
     }
     
     /**
-     * @Route("/search", name="search")
-     */
-    public function search(EntityManagerInterface $entityManager, Request $request)
-    {
-        
-        $search = $request->request->get('search');
-        
-        $repository = $entityManager->getRepository(Product::class);
-        $queryBuilder = $entityManager->createQueryBuilder();
-
-        $queryBuilder->select('p.id, p.title, p.image, p.price, c.name')
-                     ->from(Product::class, 'p')
-                     ->leftJoin(category::class, 'c', 'WITH', 'c.id = p.category')
-                     ->andWhere('p.title LIKE :search')
-                     ->setParameter('search', $search.'%');
-
-        $res = $queryBuilder->getQuery()->getScalarResult();
-
-        return $this->render('search/index.html.twig', [
-            'results' => $res
-        ]);
-    }
-
-    /**
      * @Route("/{name}", name="list_product")
      */
     public function listProduct($name, Category $category)
