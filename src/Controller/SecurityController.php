@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Ranking;
-use App\Form\LoginType;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,20 +27,15 @@ class SecurityController extends AbstractController
 
         $form->handleRequest($request);
         
-        $usernameDB = $this->getDoctrine()->getRepository(User::class)->findOneByUsername($user->getUsername());
-        $emailDB = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($user->getEmail());
-        
         if($form->isSubmitted() && $form->isValid()) {
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             $user->setRank($rank);
 
-            if($usernameDB === NULL && $emailDB === NULL) {
-                $manager->persist($user);
-                $manager->flush();
+            $manager->persist($user);
+            $manager->flush();
 
-                return $this->redirectToRoute('login');
-            }
+            return $this->redirectToRoute('login');
         }
         return $this->render('logs/register.html.twig', [
             'form' => $form->createView()
@@ -51,12 +45,11 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", priority=10, name="login")
      */
-    public function login() {
-        $user = new User();
-        $form = $this->createForm(LoginType::class, $user);
-        
-        return $this->render('logs/login.html.twig', [
-            'form' => $form->createView()
-        ]);
+    public function login() {        
+        return $this->render('logs/login.html.twig');
     }
+    /**
+     * @Route("/logout", priority=10, name="logout")
+     */
+    public function logout() {}
 }

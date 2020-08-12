@@ -100,7 +100,6 @@ class ECommerceController extends AbstractController
         ]);
     }
     /**
-     * les logs
      * panier
      * home page
      * design global du site
