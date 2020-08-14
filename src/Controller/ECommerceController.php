@@ -2,16 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Form\ProductType;
+use App\Entity\ShoppingCart;
+use App\Service\Cart\CartService;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
 class ECommerceController extends AbstractController
 {
@@ -30,10 +32,8 @@ class ECommerceController extends AbstractController
      */
     public function category()
     {
-        $repository = $this->getDoctrine()->getRepository(Category::class);
-        $categorys = $repository->findAll();
         return $this->render('e_commerce/category.html.twig', [
-            'categorys' => $categorys
+            'categorys' => $this->getDoctrine()->getRepository(Category::class)->findAll()
         ]);
     }
 
@@ -45,18 +45,8 @@ class ECommerceController extends AbstractController
     {
         $product = new Product();
         $repository = $this->getDoctrine()->getRepository(Category::class);
-        $categorys = $repository->findAll();
 
-        $form = $this->createFormBuilder($product)
-            ->add('title')
-            ->add('description')
-            ->add('image', TextType::class, ['required' => false])
-            ->add('category', EntityType::class, [
-                'class' => Category::class,
-                'choice_label' => 'name'
-            ])
-            ->add('price', NumberType::class)
-            ->getForm();
+        $form = $this->createForm(ProductType::class, $product);
 
         $form->handleRequest($request);
 
@@ -68,41 +58,73 @@ class ECommerceController extends AbstractController
 
             $category = $repository->find($product->getCategory());
 
-            return $this->redirectToRoute('list_product', ['name' => $category->getName(), 
-            'category' => $category]);
+            return $this->redirectToRoute('list_product', [
+                'name' => $category->getName(), 
+                'category' => $category
+            ]);
         }
 
         return $this->render('e_commerce/createProduct.html.twig', [
             'formProduct' => $form->createView(),
-            'categorys' => $categorys
+            'categorys' => $repository->findAll()
         ]);
     }
     
+    /**
+     * @Route("/panier", name="shopping_cart")
+     */
+    public function shoppingCart(CartService $cartService) {
+
+        return $this->render('e_commerce/shoppingCart.html.twig', [
+            'items' => $cartService->getFullCart(),
+            'total' => $cartService->getTotal()
+        ]);
+    }
+
+    /**
+     * @Route("/panier/remove/{id}", name="cart_remove")
+     */
+    public function remove($id, CartService $cartService) {
+        
+        $cartService->remove($id);
+
+        return $this->redirectToRoute('shopping_cart');
+    }
+
     /**
      * @Route("/{name}", name="list_product")
      */
     public function listProduct($name, Category $category)
     {
-        $product = $this->getDoctrine()->getRepository(Product::class)->findAll();
         
         return $this->render('e_commerce/listProductByCategory.html.twig', [
             'category' => $category,
-            'products' => $product
+            'products' => $this->getDoctrine()->getRepository(Product::class)->findAll()
         ]);
     }
     /**
      * @Route("/{name}/{id}", name="product")
      */
-    public function product($name, $id, Product $product)
+    public function product($name, 
+                            $id, 
+                            Product $product, 
+                            Request $request, 
+                            CartService $cartService)
     {
+        if($request->get('userId') || $request->get('productId')) {
+        
+            $cartService->add($id);
+
+            return $this->redirectToRoute('shopping_cart');
+        }
+        
         return $this->render('e_commerce/product.html.twig', [
             'product' => $product
         ]);
     }
+
     /**
-     * panier
      * home page
-     * design global du site
      * commande
      * auto completion search bar
      */

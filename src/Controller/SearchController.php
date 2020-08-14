@@ -30,10 +30,8 @@ class SearchController extends AbstractController
                      ->andWhere('p.title LIKE :search')
                      ->setParameter('search', $search.'%');
 
-        $res = $queryBuilder->getQuery()->getScalarResult();
-
         return $this->render('search/index.html.twig', [
-            'results' => $res
+            'results' => $queryBuilder->getQuery()->getScalarResult()
         ]);
     }
 }

@@ -13,10 +13,17 @@
     <div class="col-4"><span class="font-weight-bold">Prix :</span> {{ product.price }}€</div>
     <div class="col-4">
         <div class="border p-3">
-            <!-- A modifier lors de la création du panier et du système de paiement -->
             <h5 class="text-center">Achat</h5>
-            <button class="btn btn-muted">Ajouter au panier !</button>
-            <button class="btn btn-warning mt-2">Acheter le produit !</button>
+            {% if not app.user %}
+            <a href="{{ path('login') }}">Connectez-vous pour commander !</a>
+            {% else %}
+            <form action="{{ path('product', {'name': product.category.name, 'id': product.id}) }}" 
+                  method="post">
+                <input type="hidden" name="userId" value="{{ app.user.id }}">
+                <input type="hidden" name="productId" value="{{ product.id }}">
+                <button type="submit" class="btn btn-muted">Ajouter au panier !</button>
+            </form>
+            {% endif %}
         </div>
     </div>
 </div>

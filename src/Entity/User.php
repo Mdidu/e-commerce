@@ -56,6 +56,11 @@ class User implements UserInterface
      */
     private $rank;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ShoppingCart::class, mappedBy="users", cascade={"persist", "remove"})
+     */
+    private $shoppingCart;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -127,5 +132,23 @@ class User implements UserInterface
 
     public function getRoles() {
         return ['ROLE_USER'];
+    }
+
+    public function getShoppingCart(): ?ShoppingCart
+    {
+        return $this->shoppingCart;
+    }
+
+    public function setShoppingCart(?ShoppingCart $shoppingCart): self
+    {
+        $this->shoppingCart = $shoppingCart;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUsers = null === $shoppingCart ? null : $this;
+        if ($shoppingCart->getUsers() !== $newUsers) {
+            $shoppingCart->setUsers($newUsers);
+        }
+
+        return $this;
     }
 }
