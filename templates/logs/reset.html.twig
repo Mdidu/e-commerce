@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 class="row justify-content-center">Récupérer votre mot de passe</h1>
+    <form action="{{ path('reset_password') }}" method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" name="email" placeholder="Entrez votre mail !" required>
+        </div>
+        <button type="submit" class="btn btn-success">Réinitialiser le mot de passe !</button>
+    </form>
+{% endblock %}
