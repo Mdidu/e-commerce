@@ -131,7 +131,6 @@ class ECommerceController extends AbstractController
     }
 
     /**
-     * modifier le MDP -> creer un form + des pages
      * home page
      * commande
      * auto completion search bar
