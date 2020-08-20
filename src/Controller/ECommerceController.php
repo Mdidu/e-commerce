@@ -39,11 +39,15 @@ class ECommerceController extends AbstractController
 
     /**
      * @Route("/new", name="create_product")
+     * @Route("/update/{id}", name="update_product")
      */
-    public function createProduct(Request $request,
+    public function formProduct(Product $product = null,
+                                Request $request,
                                 EntityManagerInterface $manager)
     {
-        $product = new Product();
+        if(!$product) {
+            $product = new Product();
+        }
         $repository = $this->getDoctrine()->getRepository(Category::class);
 
         $form = $this->createForm(ProductType::class, $product);
@@ -51,7 +55,9 @@ class ECommerceController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $product->setCreatedAt(new \DateTime());
+            if(!$product->getId()){
+                $product->setCreatedAt(new \DateTime());
+            }
 
             $manager->persist($product);
             $manager->flush();
@@ -66,7 +72,8 @@ class ECommerceController extends AbstractController
 
         return $this->render('e_commerce/createProduct.html.twig', [
             'formProduct' => $form->createView(),
-            'categorys' => $repository->findAll()
+            'categorys' => $repository->findAll(),
+            'editMode' => $product->getId() !== null
         ]);
     }
     
@@ -124,6 +131,7 @@ class ECommerceController extends AbstractController
     }
 
     /**
+     * modifier le MDP -> creer un form + des pages
      * home page
      * commande
      * auto completion search bar

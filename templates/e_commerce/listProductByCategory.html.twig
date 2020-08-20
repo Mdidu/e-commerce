@@ -13,6 +13,11 @@
         <div class="card-body">
             <div class="card-text">{{product.price}}€</div>
             <div class="card-title">{{product.title}}</div>
+            {% if app.user.rank.id == 3 %}
+                <a href="{{ path('update_product', {'id': product.id}) }}" class="btn btn-success">
+                    Modifier le produit !
+                </a>
+            {% endif %}
         </div>
         </a>
     </div>

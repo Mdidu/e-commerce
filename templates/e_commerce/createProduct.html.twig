@@ -2,8 +2,15 @@
 {% form_theme formProduct 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
-    <h1 class="row justify-content-center">Ajouter un nouveau produit</h1>
-
+    
+    <h1 class="row justify-content-center">
+        {% if editMode %}
+            Modifier le produit
+        {% else %}
+            Ajouter un nouveau produit
+        {% endif %}
+    </h1>
+    
     {{ form_start(formProduct) }}
 
     {{ form_row(formProduct.title, {
@@ -35,7 +42,13 @@
         'label': 'Prix : (*)'}) 
     }}
 
-    <button type="submit" class="btn btn-primary">Ajouter le produit</button>
-
+    
+        <button type="submit" class="btn btn-primary">
+            {% if editMode %}
+                Modifier le produit
+            {% else %}
+                Ajouter le produit
+            {% endif %}
+        </button>
     {{ form_end(formProduct) }}
 {% endblock %}
