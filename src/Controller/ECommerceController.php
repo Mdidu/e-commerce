@@ -129,10 +129,4 @@ class ECommerceController extends AbstractController
             'product' => $product
         ]);
     }
-
-    /**
-     * home page
-     * commande
-     * auto completion search bar
-     */
 }
